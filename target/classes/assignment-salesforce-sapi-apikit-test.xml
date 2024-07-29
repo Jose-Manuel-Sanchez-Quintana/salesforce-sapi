@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd 
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+    <munit:config name="assignment-salesforce-sapi-apikit-test.xml" />
+    <http:request-config name="HTTP_Request_Configuration" basePath="/api">
+        <http:request-connection host="localhost" port="8083" protocol="HTTPS"/>
+    </http:request-config>
+    <munit:test name="post:\accounts:application\json:assignment-salesforce-system-api-config-201-application\json-FlowTest" description="Verifying functionality of [post:\accounts:application\json:assignment-salesforce-system-api-config-201-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="ccb4375d-24eb-405d-8217-2d255d0f070a" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 201" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_201_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\accounts:application\json:assignment-salesforce-system-api-config-400-application\json-FlowTest" description="Verifying functionality of [post:\accounts:application\json:assignment-salesforce-system-api-config-400-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json2.json')]" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="c1675cea-9193-4d6b-bd67-fb4d8923e836" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/java ---write(payload, 'application/json') as String]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_400_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\accounts:application\json:assignment-salesforce-system-api-config-404-application\json-FlowTest" description="Verifying functionality of [post:\accounts:application\json:assignment-salesforce-system-api-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="5c940ca6-106a-4578-a5a7-8ecb71c4c2cb" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_404_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\accounts:application\json:assignment-salesforce-system-api-config-500-application\json-FlowTest" description="Verifying functionality of [post:\accounts:application\json:assignment-salesforce-system-api-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="efd41866-fc6e-4e01-8ca0-cddd93f35438" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/java ---write(payload, 'application/json') as String]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_500_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-201-application\json-FlowTest" description="Verifying functionality of [patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-201-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/patch_accounts_{id}_application_json.json')]" />
+            <set-variable variableName="id" value="#['1']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="6473f2ec-ed5b-4885-bab5-540bc8f1bfa6" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 201" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/patch_201_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-400-application\json-FlowTest" description="Verifying functionality of [patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-400-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/patch_accounts_{id}_application_json2.json')]" />
+            <set-variable variableName="id" value="#['1']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="c64b4808-6fed-46de-ae0d-1341fa284616" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/patch_400_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-404-application\json-FlowTest" description="Verifying functionality of [patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/patch_accounts_{id}_application_json.json')]" />
+            <set-variable variableName="id" value="#['1']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="b02b772a-8e3f-41ba-b109-c352819fb379" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/java ---write(payload, 'application/json') as String]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/patch_404_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-500-application\json-FlowTest" description="Verifying functionality of [patch:\accounts\(id):application\json:assignment-salesforce-system-api-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="patch:\accounts\(id):application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/patch_accounts_{id}_application_json.json')]" />
+            <set-variable variableName="id" value="#['null']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="72be283b-7da5-4e55-97f6-c1b667a295ec" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/java ---write(payload, 'application/json') as String]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/patch_500_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="delete:\accounts\(id):assignment-salesforce-system-api-config-200-application\json-FlowTest" description="Verifying functionality of [delete:\accounts\(id):assignment-salesforce-system-api-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="delete:\accounts\(id):assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-variable variableName="id" value="#['1']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="106b52ca-cec4-49bd-b3d5-51276ef7c062" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/delete_200_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="delete:\accounts\(id):assignment-salesforce-system-api-config-400-application\json-FlowTest" description="Verifying functionality of [delete:\accounts\(id):assignment-salesforce-system-api-config-400-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="delete:\accounts\(id):assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-variable variableName="id" value="#['null']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="38914432-3b8d-49d6-b1ea-b9ad66674367" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/delete_400_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="delete:\accounts\(id):assignment-salesforce-system-api-config-404-application\json-FlowTest" description="Verifying functionality of [delete:\accounts\(id):assignment-salesforce-system-api-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="delete:\accounts\(id):assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-variable variableName="id" value="#['1']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="f23bed40-7e83-40ef-94d6-1acf99928419" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/delete_404_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="delete:\accounts\(id):assignment-salesforce-system-api-config-500-application\json-FlowTest" description="Verifying functionality of [delete:\accounts\(id):assignment-salesforce-system-api-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="delete:\accounts\(id):assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+			<set-variable variableName="id" value="#['null']" doc:name="id" />
+        </munit:behavior>
+        <munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="cd37b0ef-8c4f-49d3-8eab-ddf60de032c6" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/java ---write(payload, 'application/json') as String]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/delete_500_accounts_{id}_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\accounts:assignment-salesforce-system-api-config-200-application\json-FlowTest" description="Verifying functionality of [get:\accounts:assignment-salesforce-system-api-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="get:\accounts:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+		<munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="8f73a89f-5430-493e-bb59-dec5c9c8d3cf" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/get_200_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\accounts:assignment-salesforce-system-api-config-400-application\json-FlowTest" description="Verifying functionality of [get:\accounts:assignment-salesforce-system-api-config-400-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="get:\accounts:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+		<munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="4f2e72a4-06fc-43b9-ba5f-342303e866a1" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/java ---write(payload, 'application/json') as String]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/get_400_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\accounts:assignment-salesforce-system-api-config-404-application\json-FlowTest" description="Verifying functionality of [get:\accounts:assignment-salesforce-system-api-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="get:\accounts:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/accounts/a">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/get_404_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\accounts:assignment-salesforce-system-api-config-500-application\json-FlowTest" description="Verifying functionality of [get:\accounts:assignment-salesforce-system-api-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="get:\accounts:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+		<munit:execution>
+			<http:request method="PUT" doc:name="Request" doc:id="3ae856db-c276-4456-ad93-9cbb2b374a30" config-ref="HTTP_Request_Configuration" path="/accounts">
+				<http:headers><![CDATA[#[{"Accept":"application/json","Content-Type":"application/json"}]]]></http:headers>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/get_500_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="405-NotAllowed" description="Verifying functionality of 405-NotAllowed">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="PUT" path="/accounts">
+                <http:headers>#[{"Accept":"application/json","Content-Type":"application/json"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 201" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_201_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="406-NotAccesible" description="Verifying functionality of 406-NotAccesible">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/accounts">
+                <http:headers>#[{"Accept":"application/xml","Content-Type":"application/json"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 201" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_201_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="415-UnsupportedMediaType" description="Verifying functionality of 415-UnsupportedMediaType">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="assignment-salesforce-system-api-main" />
+            <munit:enable-flow-source value="post:\accounts:application\json:assignment-salesforce-system-api-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_accounts_application_json.json')]" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/accounts">
+                <http:headers>#[{"Accept":"application/json","Content-Type":"application/xml"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 201" />
+            <munit-tools:assert-that expression="#[output application/json ---payload]" is="#[MunitTools::equalTo(MunitTools::getResourceAsString('scaffolder/response/post_201_accounts_application_json.json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+</mule>

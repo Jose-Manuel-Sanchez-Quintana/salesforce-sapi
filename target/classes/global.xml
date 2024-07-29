@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<global-property doc:name="Global Property" doc:id="0caf8fd8-b45d-428a-a1fa-8325c64b6dc6" name="env" value="staging" />
+	<configuration-properties doc:name="Configuration properties" doc:id="ade44db0-c21b-46f5-a56f-33ebf00f585e" file="${env}.properties" />
+</mule>
